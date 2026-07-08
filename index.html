@@ -394,7 +394,6 @@
 <header class="nav">
   <div class="logo">AYYAPPA <span>LENS</span></div>
   <nav class="links">
-    <a href="#work">Roll</a>
     <a href="#about">About</a>
     <a href="#contact">Contact</a>
   </nav>
@@ -414,98 +413,21 @@
 <section id="work">
   <div class="gallery-head">
     <h2>CONTACT SHEET</h2>
-    <span class="mono">7 FRAMES</span>
+    <span class="mono" id="frameCount">0 FRAMES</span>
   </div>
 
   <div class="contact-sheet" id="contactSheet">
-    <!-- To add more frames later: copy one .frame block, update the
-         image src, frame number, and caption, then paste it in here.
-         Keep data-index values sequential (0, 1, 2, ...). -->
-
-    <div class="frame" data-index="0">
-      <div class="frame-img">
-        <span class="fnum">01</span>
-        <img src="https://res.cloudinary.com/ds5tpnjy4/image/upload/v1781064834/IMG20200715151056-01_krgpk8.jpg" alt="Phone photograph 01" loading="lazy">
-      </div>
-      <div class="frame-cap">
-        <span><b>Untitled</b></span>
-        <span>2020.07.15</span>
-      </div>
-    </div>
-
-    <div class="frame" data-index="1">
-      <div class="frame-img">
-        <span class="fnum">02</span>
-        <img src="https://res.cloudinary.com/ds5tpnjy4/image/upload/v1781064834/IMG20210607171902-01_w3vcby.jpg" alt="Phone photograph 02" loading="lazy">
-      </div>
-      <div class="frame-cap">
-        <span><b>Untitled</b></span>
-        <span>2021.06.07</span>
-      </div>
-    </div>
-
-    <div class="frame" data-index="2">
-      <div class="frame-img">
-        <span class="fnum">03</span>
-        <img src="https://res.cloudinary.com/ds5tpnjy4/image/upload/v1781064834/IMG20181027095908_vqxxi7.jpg" alt="Phone photograph 03" loading="lazy">
-      </div>
-      <div class="frame-cap">
-        <span><b>Untitled</b></span>
-        <span>2018.10.27</span>
-      </div>
-    </div>
-
-    <div class="frame" data-index="3">
-      <div class="frame-img">
-        <span class="fnum">04</span>
-        <img src="https://res.cloudinary.com/ds5tpnjy4/image/upload/v1781064833/IMG20200723122656-01-01_hdauor.jpg" alt="Phone photograph 04" loading="lazy">
-      </div>
-      <div class="frame-cap">
-        <span><b>Untitled</b></span>
-        <span>2020.07.23</span>
-      </div>
-    </div>
-
-    <div class="frame" data-index="4">
-      <div class="frame-img">
-        <span class="fnum">05</span>
-        <img src="https://res.cloudinary.com/ds5tpnjy4/image/upload/v1781064832/IMG20200824071140-01_popnqu.jpg" alt="Phone photograph 05" loading="lazy">
-      </div>
-      <div class="frame-cap">
-        <span><b>Untitled</b></span>
-        <span>2020.08.24</span>
-      </div>
-    </div>
-
-    <div class="frame" data-index="5">
-      <div class="frame-img">
-        <span class="fnum">06</span>
-        <img src="https://res.cloudinary.com/ds5tpnjy4/image/upload/v1781064832/IMG20200818151246-01_zwbipa.jpg" alt="Phone photograph 06" loading="lazy">
-      </div>
-      <div class="frame-cap">
-        <span><b>Untitled</b></span>
-        <span>2020.08.18</span>
-      </div>
-    </div>
-
-    <div class="frame" data-index="6">
-      <div class="frame-img">
-        <span class="fnum">07</span>
-        <img src="https://res.cloudinary.com/ds5tpnjy4/image/upload/v1781064771/IMG20201120065632-01_jqy4bx.jpg" alt="Phone photograph 07" loading="lazy">
-      </div>
-      <div class="frame-cap">
-        <span><b>Untitled</b></span>
-        <span>2020.11.20</span>
-      </div>
-    </div>
+    <!-- Frames are generated automatically from the PHOTOS array
+         near the top of the script at the bottom of this file.
+         Don't edit this div directly — edit the PHOTOS array instead. -->
   </div>
 
   <div class="howto">
     <h3>ADD MORE FRAMES</h3>
     <ol>
-      <li>Copy one whole <code>.frame</code> block inside <code>#contactSheet</code> and paste it back in.</li>
-      <li>Swap the <code>img src="..."</code> for your new photo's URL, and bump the <code>fnum</code> (frame number).</li>
-      <li>Update the caption — the title and date/detail — in the <code>.frame-cap</code> block below the image.</li>
+      <li>Find the <code>PHOTOS</code> array near the bottom of the file (in the first <code>&lt;script&gt;</code> block).</li>
+      <li>Add a new object with <code>src</code> (image URL), <code>title</code>, and <code>date</code> — copy an existing entry as a template.</li>
+      <li>Save the file. The frame number, caption, gallery layout, and frame count update on their own.</li>
       <li>To change the hero photo, edit the <code>url("...")</code> inside the <code>.hero</code> style block near the top of the file.</li>
     </ol>
   </div>
@@ -543,11 +465,93 @@
 </div>
 
 <script>
+  // ============================================================
+  // PHOTOS — this is the only thing you need to edit.
+  // Add, remove, or reorder objects here and the gallery,
+  // frame numbers, captions, hero photo option, and frame count
+  // all update automatically. No other HTML needs to change.
+  //
+  //   src   — image URL (required)
+  //   title — caption title, e.g. a place or short name (optional)
+  //   date  — caption date/detail, e.g. "2020.07.15" (optional)
+  //   alt   — accessibility text for the image (optional)
+  // ============================================================
+  const PHOTOS = [
+    {
+      src: "https://res.cloudinary.com/ds5tpnjy4/image/upload/v1781064834/IMG20200715151056-01_krgpk8.jpg",
+      title: "Untitled",
+      date: "2020.07.15"
+    },
+    {
+      src: "https://res.cloudinary.com/ds5tpnjy4/image/upload/v1781064834/IMG20210607171902-01_w3vcby.jpg",
+      title: "Untitled",
+      date: "2021.06.07"
+    },
+    {
+      src: "https://res.cloudinary.com/ds5tpnjy4/image/upload/v1781064834/IMG20181027095908_vqxxi7.jpg",
+      title: "Untitled",
+      date: "2018.10.27"
+    },
+    {
+      src: "https://res.cloudinary.com/ds5tpnjy4/image/upload/v1781064833/IMG20200723122656-01-01_hdauor.jpg",
+      title: "Untitled",
+      date: "2020.07.23"
+    },
+    {
+      src: "https://res.cloudinary.com/ds5tpnjy4/image/upload/v1781064832/IMG20200824071140-01_popnqu.jpg",
+      title: "Untitled",
+      date: "2020.08.24"
+    },
+    {
+      src: "https://res.cloudinary.com/ds5tpnjy4/image/upload/v1781064832/IMG20200818151246-01_zwbipa.jpg",
+      title: "Untitled",
+      date: "2020.08.18"
+    },
+    {
+      src: "https://res.cloudinary.com/ds5tpnjy4/image/upload/v1781064771/IMG20201120065632-01_jqy4bx.jpg",
+      title: "Untitled",
+      date: "2020.11.20"
+    }
+  ];
+</script>
+
+<script>
   (function(){
     const container = document.getElementById('contactSheet');
+    const frameCountEl = document.getElementById('frameCount');
+
+    function pad(n){ return String(n).padStart(2, '0'); }
+
+    function renderFrames(photos){
+      container.innerHTML = photos.map((photo, i) => {
+        const num = pad(i + 1);
+        const title = photo.title || 'Untitled';
+        const date = photo.date || '';
+        const alt = photo.alt || (title + ' — phone photograph ' + num);
+        return (
+          '<div class="frame" data-index="' + i + '">' +
+            '<div class="frame-img">' +
+              '<span class="fnum">' + num + '</span>' +
+              '<img src="' + photo.src + '" alt="' + alt + '" loading="lazy">' +
+            '</div>' +
+            '<div class="frame-cap">' +
+              '<span><b>' + title + '</b></span>' +
+              '<span>' + date + '</span>' +
+            '</div>' +
+          '</div>'
+        );
+      }).join('');
+
+      if(frameCountEl){
+        frameCountEl.textContent = photos.length + (photos.length === 1 ? ' FRAME' : ' FRAMES');
+      }
+    }
+
+    renderFrames(PHOTOS);
+
+    // ---------- Masonry-style justified layout ----------
     const frames = Array.from(container.querySelectorAll('.frame'));
     const gap = 8;
-    const captionHeight = 34; // approx height of the .frame-cap strip
 
     function targetRowHeight(){
       const w = window.innerWidth;
@@ -628,12 +632,8 @@
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(layout, 120);
     });
-  })();
-</script>
 
-<script>
-  (function(){
-    const frames = Array.from(document.querySelectorAll('#contactSheet .frame'));
+    // ---------- Lightbox ----------
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightboxImg');
     const lightboxNum = document.getElementById('lightboxNum');
@@ -660,7 +660,7 @@
       lightbox.classList.add('open');
     }
 
-    function close(){
+    function closeLightbox(){
       lightbox.classList.remove('open');
     }
 
@@ -668,17 +668,17 @@
       frame.querySelector('.frame-img').addEventListener('click', () => show(i));
     });
 
-    document.getElementById('lightboxClose').addEventListener('click', close);
+    document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
     document.getElementById('lightboxPrev').addEventListener('click', () => show(current - 1));
     document.getElementById('lightboxNext').addEventListener('click', () => show(current + 1));
 
     lightbox.addEventListener('click', (e) => {
-      if(e.target === lightbox) close();
+      if(e.target === lightbox) closeLightbox();
     });
 
     document.addEventListener('keydown', (e) => {
       if(!lightbox.classList.contains('open')) return;
-      if(e.key === 'Escape') close();
+      if(e.key === 'Escape') closeLightbox();
       if(e.key === 'ArrowLeft') show(current - 1);
       if(e.key === 'ArrowRight') show(current + 1);
     });
