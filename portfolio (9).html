@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ayyappa Lens — Phone Photography</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #DCDBD6;
+    --bg-soft: #E4E3DE;
+    --ink: #17181A;
+    --ink-soft: #55575C;
+    --accent: #FF4B26;
+    --line: #B2B0A9;
+    --panel: #C9C7C0;
+    --panel-dark: #B7B5AD;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Archivo', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+
+  .counter{
+    font-family:'Bebas Neue', sans-serif;
+    letter-spacing:0.04em;
+  }
+
+  a{ color:inherit; }
+
+  /* ---------- Sprocket strip ---------- */
+  .sprockets{
+    display:flex;
+    background:var(--ink);
+    height:14px;
+  }
+  .sprockets span{
+    flex:1;
+    max-width:18px;
+    height:8px;
+    margin:3px 5px;
+    background:var(--bg);
+  }
+
+  /* ---------- Nav ---------- */
+  header.nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:22px clamp(20px,5vw,56px);
+    border-bottom:1px solid var(--line);
+  }
+  .logo{
+    font-family:'Bebas Neue', sans-serif;
+    font-size:22px;
+    letter-spacing:0.08em;
+  }
+  .logo span{ color:var(--accent); }
+  nav.links{
+    display:flex;
+    gap:28px;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:0.12em;
+  }
+  nav.links a{ text-decoration:none; opacity:0.75; transition:opacity .2s; }
+  nav.links a:hover{ opacity:1; color:var(--accent); }
+  @media (max-width:560px){ nav.links{ display:none; } }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;
+    margin:clamp(16px,3vw,32px);
+    min-height:78vh;
+    background:
+      linear-gradient(0deg, rgba(0,0,0,0.15), rgba(0,0,0,0.15)),
+      url("https://res.cloudinary.com/ds5tpnjy4/image/upload/v1781064834/IMG20200715151056-01_krgpk8.jpg") center/cover no-repeat;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    overflow:hidden;
+  }
+  .hero-top{
+    display:flex;
+    justify-content:space-between;
+    padding:20px 24px;
+  }
+  .hero-top .counter{
+    font-size:20px;
+    color:var(--bg);
+    background:rgba(0,0,0,0.35);
+    padding:4px 10px;
+  }
+  .hero-top .mono{
+    font-size:11px;
+    color:var(--bg);
+    background:rgba(0,0,0,0.35);
+    padding:4px 10px;
+    text-align:right;
+  }
+  .hero-bottom{
+    padding:32px clamp(20px,5vw,48px) 40px;
+    background:linear-gradient(0deg, rgba(0,0,0,0.55), transparent);
+  }
+  .hero-bottom h1{
+    font-family:'Bebas Neue', sans-serif;
+    font-size:clamp(48px, 9vw, 108px);
+    line-height:0.92;
+    color:var(--bg);
+    letter-spacing:0.01em;
+  }
+  .hero-bottom p{
+    color:var(--bg);
+    max-width:480px;
+    margin-top:14px;
+    font-size:15px;
+    opacity:0.9;
+  }
+  .hero-note{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    pointer-events:none;
+  }
+  .hero-note span{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:rgba(255,255,255,0.55);
+    background:rgba(0,0,0,0.25);
+    padding:6px 12px;
+    border:1px dashed rgba(255,255,255,0.4);
+  }
+
+  /* ---------- Intro strip ---------- */
+  .intro{
+    padding:48px clamp(20px,5vw,56px);
+    border-top:1px solid var(--line);
+  }
+  .intro h2{
+    font-family:'Bebas Neue', sans-serif;
+    font-size:28px;
+    letter-spacing:0.03em;
+    margin-bottom:12px;
+  }
+  .intro p{
+    color:var(--ink-soft);
+    font-size:15px;
+    line-height:1.6;
+    max-width:52ch;
+  }
+
+  /* ---------- Gallery ---------- */
+  .gallery-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    padding:40px clamp(20px,5vw,56px) 0;
+  }
+  .gallery-head h2{
+    font-family:'Bebas Neue', sans-serif;
+    font-size:26px;
+    letter-spacing:0.03em;
+  }
+  .gallery-head span{
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+
+  .contact-sheet{
+    position:relative;
+    margin:24px clamp(20px,5vw,56px) 0;
+  }
+
+  .frame{
+    position:absolute;
+    top:0;
+    left:0;
+    background:var(--bg);
+    display:block;
+    border:1px solid var(--line);
+    box-sizing:border-box;
+  }
+  .frame-img{
+    position:relative;
+    background:
+      repeating-linear-gradient(45deg, var(--panel-dark) 0 2px, var(--panel) 2px 22px);
+    overflow:hidden;
+    line-height:0;
+  }
+  .frame-img img{
+    width:100%; height:100%; object-fit:cover; display:block;
+  }
+  .frame-img .ph-label{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:16px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--ink-soft);
+  }
+  .frame-img .fnum{
+    position:absolute;
+    top:10px; left:10px;
+    font-family:'Bebas Neue', sans-serif;
+    font-size:15px;
+    color:var(--accent);
+    background:rgba(220,219,214,0.85);
+    padding:1px 7px;
+  }
+  .frame-cap{
+    padding:10px 12px;
+    display:flex;
+    justify-content:space-between;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    color:var(--ink-soft);
+    border-top:1px solid var(--line);
+  }
+  .frame-cap b{ color:var(--ink); font-weight:500; }
+
+  /* ---------- How-to panel ---------- */
+  .howto{
+    margin:56px clamp(20px,5vw,56px) 0;
+    padding:22px 24px;
+    border:1px dashed var(--ink-soft);
+    background:var(--bg-soft);
+  }
+  .howto h3{
+    font-family:'Bebas Neue', sans-serif;
+    font-size:18px;
+    letter-spacing:0.03em;
+    margin-bottom:10px;
+  }
+  .howto ol{
+    padding-left:18px;
+    font-size:13px;
+    color:var(--ink-soft);
+    line-height:1.8;
+  }
+  .howto code{
+    font-family:'IBM Plex Mono', monospace;
+    background:var(--panel);
+    padding:1px 5px;
+    font-size:12px;
+    color:var(--ink);
+  }
+
+  /* ---------- About / Footer ---------- */
+  .about{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:24px;
+    padding:64px clamp(20px,5vw,56px) 40px;
+    margin-top:40px;
+    border-top:1px solid var(--line);
+  }
+  .about h2{
+    font-family:'Bebas Neue', sans-serif;
+    font-size:26px;
+  }
+  .about p{
+    color:var(--ink-soft);
+    font-size:14px;
+    line-height:1.7;
+    max-width:48ch;
+  }
+  .about .contacts{
+    font-size:13px;
+    line-height:2.2;
+  }
+  .about .contacts a{ text-decoration:none; border-bottom:1px solid var(--ink); }
+  @media (max-width:700px){ .about{ grid-template-columns:1fr; } }
+
+  footer{
+    display:flex;
+    justify-content:space-between;
+    padding:18px clamp(20px,5vw,56px);
+    font-size:11px;
+    color:var(--ink-soft);
+    font-family:'IBM Plex Mono', monospace;
+    border-top:1px solid var(--line);
+  }
+
+  /* ---------- Lightbox ---------- */
+  .frame-img{ cursor:zoom-in; }
+
+  .lightbox{
+    position:fixed;
+    inset:0;
+    background:rgba(10,10,10,0.92);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:100;
+    padding:clamp(16px,4vw,56px);
+  }
+  .lightbox.open{ display:flex; }
+
+  .lightbox img{
+    max-width:100%;
+    max-height:82vh;
+    object-fit:contain;
+    box-shadow:0 20px 60px rgba(0,0,0,0.5);
+  }
+
+  .lightbox-frame{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:14px;
+    max-width:100%;
+  }
+
+  .lightbox-cap{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--bg);
+    display:flex;
+    gap:14px;
+    align-items:center;
+  }
+  .lightbox-cap .counter{
+    color:var(--accent);
+    font-size:16px;
+  }
+
+  .lightbox-close{
+    position:absolute;
+    top:20px;
+    right:24px;
+    width:40px;
+    height:40px;
+    border:1px solid rgba(255,255,255,0.4);
+    background:transparent;
+    color:var(--bg);
+    font-size:20px;
+    line-height:1;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:border-color .2s, color .2s;
+  }
+  .lightbox-close:hover{ border-color:var(--accent); color:var(--accent); }
+
+  .lightbox-nav{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:44px;
+    height:44px;
+    border:1px solid rgba(255,255,255,0.4);
+    background:transparent;
+    color:var(--bg);
+    font-size:20px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:border-color .2s, color .2s;
+  }
+  .lightbox-nav:hover{ border-color:var(--accent); color:var(--accent); }
+  .lightbox-prev{ left:clamp(8px,3vw,32px); }
+  .lightbox-next{ right:clamp(8px,3vw,32px); }
+
+  @media (max-width:600px){
+    .lightbox-nav{ width:36px; height:36px; font-size:16px; }
+    .lightbox-close{ width:34px; height:34px; font-size:16px; top:12px; right:14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sprockets">
+  <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+</div>
+
+<header class="nav">
+  <div class="logo">AYYAPPA <span>LENS</span></div>
+  <nav class="links">
+    <a href="#work">Roll</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-top">
+    <span class="counter">#001</span>
+    <span class="mono">SHOT ON PHONE — UNEDITED ROLL</span>
+  </div>
+  <div class="hero-bottom">
+    <h1>EVERY DAY,<br>ONE POCKET,<br>ONE LENS.</h1>
+    <p>A running log of frames shot entirely on phone — no separate camera, no crew, just whatever was in front of me and thirty seconds to catch it.</p>
+  </div>
+</section>
+
+<section id="work">
+  <div class="gallery-head">
+    <h2>CONTACT SHEET</h2>
+    <span class="mono">7 FRAMES</span>
+  </div>
+
+  <div class="contact-sheet" id="contactSheet">
+    <!-- To add more frames later: copy one .frame block, update the
+         image src, frame number, and caption, then paste it in here.
+         Keep data-index values sequential (0, 1, 2, ...). -->
+
+    <div class="frame" data-index="0">
+      <div class="frame-img">
+        <span class="fnum">01</span>
+        <img src="https://res.cloudinary.com/ds5tpnjy4/image/upload/v1781064834/IMG20200715151056-01_krgpk8.jpg" alt="Phone photograph 01" loading="lazy">
+      </div>
+      <div class="frame-cap">
+        <span><b>Untitled</b></span>
+        <span>2020.07.15</span>
+      </div>
+    </div>
+
+    <div class="frame" data-index="1">
+      <div class="frame-img">
+        <span class="fnum">02</span>
+        <img src="https://res.cloudinary.com/ds5tpnjy4/image/upload/v1781064834/IMG20210607171902-01_w3vcby.jpg" alt="Phone photograph 02" loading="lazy">
+      </div>
+      <div class="frame-cap">
+        <span><b>Untitled</b></span>
+        <span>2021.06.07</span>
+      </div>
+    </div>
+
+    <div class="frame" data-index="2">
+      <div class="frame-img">
+        <span class="fnum">03</span>
+        <img src="https://res.cloudinary.com/ds5tpnjy4/image/upload/v1781064834/IMG20181027095908_vqxxi7.jpg" alt="Phone photograph 03" loading="lazy">
+      </div>
+      <div class="frame-cap">
+        <span><b>Untitled</b></span>
+        <span>2018.10.27</span>
+      </div>
+    </div>
+
+    <div class="frame" data-index="3">
+      <div class="frame-img">
+        <span class="fnum">04</span>
+        <img src="https://res.cloudinary.com/ds5tpnjy4/image/upload/v1781064833/IMG20200723122656-01-01_hdauor.jpg" alt="Phone photograph 04" loading="lazy">
+      </div>
+      <div class="frame-cap">
+        <span><b>Untitled</b></span>
+        <span>2020.07.23</span>
+      </div>
+    </div>
+
+    <div class="frame" data-index="4">
+      <div class="frame-img">
+        <span class="fnum">05</span>
+        <img src="https://res.cloudinary.com/ds5tpnjy4/image/upload/v1781064832/IMG20200824071140-01_popnqu.jpg" alt="Phone photograph 05" loading="lazy">
+      </div>
+      <div class="frame-cap">
+        <span><b>Untitled</b></span>
+        <span>2020.08.24</span>
+      </div>
+    </div>
+
+    <div class="frame" data-index="5">
+      <div class="frame-img">
+        <span class="fnum">06</span>
+        <img src="https://res.cloudinary.com/ds5tpnjy4/image/upload/v1781064832/IMG20200818151246-01_zwbipa.jpg" alt="Phone photograph 06" loading="lazy">
+      </div>
+      <div class="frame-cap">
+        <span><b>Untitled</b></span>
+        <span>2020.08.18</span>
+      </div>
+    </div>
+
+    <div class="frame" data-index="6">
+      <div class="frame-img">
+        <span class="fnum">07</span>
+        <img src="https://res.cloudinary.com/ds5tpnjy4/image/upload/v1781064771/IMG20201120065632-01_jqy4bx.jpg" alt="Phone photograph 07" loading="lazy">
+      </div>
+      <div class="frame-cap">
+        <span><b>Untitled</b></span>
+        <span>2020.11.20</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="howto">
+    <h3>ADD MORE FRAMES</h3>
+    <ol>
+      <li>Copy one whole <code>.frame</code> block inside <code>#contactSheet</code> and paste it back in.</li>
+      <li>Swap the <code>img src="..."</code> for your new photo's URL, and bump the <code>fnum</code> (frame number).</li>
+      <li>Update the caption — the title and date/detail — in the <code>.frame-cap</code> block below the image.</li>
+      <li>To change the hero photo, edit the <code>url("...")</code> inside the <code>.hero</code> style block near the top of the file.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div>
+    <h2>ABOUT AYYAPPA</h2>
+    <p>Passionate about travel and clicking pictures on mobile — chasing light, landscapes, and small moments wherever the road leads, one phone camera at a time.</p>
+  </div>
+  <div class="contacts mono" id="contact">
+    INSTAGRAM — <a href="#">@yourhandle</a><br>
+    EMAIL — <a href="#">you@email.com</a><br>
+    PRINTS — <a href="#">on request</a>
+  </div>
+</section>
+
+<footer>
+  <span>AYYAPPA LENS © 2026</span>
+  <span>SHOT &amp; BUILT ON PHONE</span>
+</footer>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close preview">&times;</button>
+  <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous photo">&larr;</button>
+  <div class="lightbox-frame">
+    <img id="lightboxImg" src="" alt="">
+    <div class="lightbox-cap">
+      <span class="counter" id="lightboxNum">01</span>
+      <span id="lightboxTitle">Untitled</span>
+      <span id="lightboxMeta"></span>
+    </div>
+  </div>
+  <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next photo">&rarr;</button>
+</div>
+
+<script>
+  (function(){
+    const container = document.getElementById('contactSheet');
+    const frames = Array.from(container.querySelectorAll('.frame'));
+    const gap = 8;
+    const captionHeight = 34; // approx height of the .frame-cap strip
+
+    function targetRowHeight(){
+      const w = window.innerWidth;
+      if(w <= 560) return 220;
+      if(w <= 900) return 240;
+      return 280;
+    }
+
+    function layout(){
+      const containerWidth = container.clientWidth;
+      const rowH = targetRowHeight();
+
+      let row = [];
+      let rowAspectSum = 0;
+      let top = 0;
+
+      function commitRow(items){
+        if(items.length === 0) return;
+        const totalGap = gap * (items.length - 1);
+        const sumAspect = items.reduce((s, it) => s + it.aspect, 0);
+        const imgHeight = (containerWidth - totalGap) / sumAspect;
+
+        let left = 0;
+        let rowTotalHeight = 0;
+        items.forEach(it => {
+          const w = it.aspect * imgHeight;
+          it.frame.style.width = w + 'px';
+          it.frame.querySelector('.frame-img').style.height = imgHeight + 'px';
+          it.frame.style.transform = 'translate(' + left + 'px,' + top + 'px)';
+          left += w + gap;
+          rowTotalHeight = Math.max(rowTotalHeight, it.frame.offsetHeight);
+        });
+        top += rowTotalHeight + gap;
+      }
+
+      frames.forEach(frame => {
+        const img = frame.querySelector('img');
+        const aspect = (img.naturalWidth && img.naturalHeight) ? img.naturalWidth / img.naturalHeight : 1;
+        row.push({ frame, aspect });
+        rowAspectSum += aspect;
+
+        const estWidth = rowAspectSum * rowH + gap * (row.length - 1);
+        if(estWidth >= containerWidth){
+          commitRow(row);
+          row = [];
+          rowAspectSum = 0;
+        }
+      });
+
+      if(row.length) commitRow(row);
+
+      container.style.height = Math.max(top - gap, 0) + 'px';
+    }
+
+    const imgs = frames.map(f => f.querySelector('img')).filter(Boolean);
+    let pending = imgs.length;
+
+    function onImgReady(){
+      pending -= 1;
+      if(pending <= 0) layout();
+    }
+
+    if(imgs.length === 0){
+      layout();
+    } else {
+      imgs.forEach(img => {
+        if(img.complete && img.naturalWidth){
+          onImgReady();
+        } else {
+          img.addEventListener('load', onImgReady);
+          img.addEventListener('error', onImgReady);
+        }
+      });
+    }
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(layout, 120);
+    });
+  })();
+</script>
+
+<script>
+  (function(){
+    const frames = Array.from(document.querySelectorAll('#contactSheet .frame'));
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxNum = document.getElementById('lightboxNum');
+    const lightboxTitle = document.getElementById('lightboxTitle');
+    const lightboxMeta = document.getElementById('lightboxMeta');
+    let current = 0;
+
+    function show(index){
+      if(index < 0) index = frames.length - 1;
+      if(index >= frames.length) index = 0;
+      current = index;
+
+      const frame = frames[current];
+      const img = frame.querySelector('.frame-img img');
+      const fnum = frame.querySelector('.fnum').textContent;
+      const capSpans = frame.querySelectorAll('.frame-cap span');
+
+      lightboxImg.src = img.src;
+      lightboxImg.alt = img.alt;
+      lightboxNum.textContent = '#' + fnum;
+      lightboxTitle.textContent = capSpans[0] ? capSpans[0].textContent : '';
+      lightboxMeta.textContent = capSpans[1] ? capSpans[1].textContent : '';
+
+      lightbox.classList.add('open');
+    }
+
+    function close(){
+      lightbox.classList.remove('open');
+    }
+
+    frames.forEach((frame, i) => {
+      frame.querySelector('.frame-img').addEventListener('click', () => show(i));
+    });
+
+    document.getElementById('lightboxClose').addEventListener('click', close);
+    document.getElementById('lightboxPrev').addEventListener('click', () => show(current - 1));
+    document.getElementById('lightboxNext').addEventListener('click', () => show(current + 1));
+
+    lightbox.addEventListener('click', (e) => {
+      if(e.target === lightbox) close();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if(!lightbox.classList.contains('open')) return;
+      if(e.key === 'Escape') close();
+      if(e.key === 'ArrowLeft') show(current - 1);
+      if(e.key === 'ArrowRight') show(current + 1);
+    });
+  })();
+</script>
+
+</body>
+</html>
