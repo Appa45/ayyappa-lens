@@ -73,7 +73,25 @@
     text-transform:uppercase;
     letter-spacing:0.12em;
   }
-  nav.links a{ text-decoration:none; opacity:0.75; transition:opacity .2s; }
+  nav.links a{
+    position:relative;
+    text-decoration:none;
+    opacity:0.75;
+    transition:opacity .2s;
+    padding-bottom:2px;
+  }
+  nav.links a::after{
+    content:'';
+    position:absolute;
+    left:0; bottom:0;
+    width:100%;
+    height:1px;
+    background:var(--accent);
+    transform:scaleX(0);
+    transform-origin:left;
+    transition:transform .25s ease;
+  }
+  nav.links a:hover::after{ transform:scaleX(1); }
   nav.links a:hover{ opacity:1; color:var(--accent); }
   @media (max-width:560px){ nav.links{ display:none; } }
 
@@ -100,6 +118,8 @@
     color:var(--bg);
     background:rgba(0,0,0,0.35);
     padding:4px 10px;
+    opacity:0;
+    animation:heroIn .6s ease .1s forwards;
   }
   .hero-top .mono{
     font-size:11px;
@@ -107,6 +127,8 @@
     background:rgba(0,0,0,0.35);
     padding:4px 10px;
     text-align:right;
+    opacity:0;
+    animation:heroIn .6s ease .1s forwards;
   }
   .hero-bottom{
     padding:32px clamp(20px,5vw,48px) 40px;
@@ -118,13 +140,21 @@
     line-height:0.92;
     color:var(--bg);
     letter-spacing:0.01em;
+    opacity:0;
+    transform:translateY(24px);
+    animation:heroIn .7s ease .2s forwards;
+  }
+  @keyframes heroIn{
+    to{ opacity:1; transform:none; }
   }
   .hero-bottom p{
     color:var(--bg);
     max-width:480px;
     margin-top:14px;
     font-size:15px;
-    opacity:0.9;
+    opacity:0;
+    transform:translateY(18px);
+    animation:heroIn .7s ease .4s forwards;
   }
   .hero-note{
     position:absolute;
@@ -192,6 +222,15 @@
     border:1px solid var(--line);
     box-sizing:border-box;
   }
+  .frame-inner{
+    opacity:0;
+    transform:translateY(28px);
+    transition:opacity .6s ease, transform .6s ease;
+  }
+  .frame.in-view .frame-inner{
+    opacity:1;
+    transform:translateY(0);
+  }
   .frame-img{
     position:relative;
     background:
@@ -201,6 +240,10 @@
   }
   .frame-img img{
     width:100%; height:100%; object-fit:cover; display:block;
+    transition:transform .5s ease;
+  }
+  .frame-img:hover img{
+    transform:scale(1.06);
   }
   .frame-img .ph-label{
     position:absolute;
@@ -222,6 +265,10 @@
     color:var(--accent);
     background:rgba(220,219,214,0.85);
     padding:1px 7px;
+    transition:transform .3s ease;
+  }
+  .frame-img:hover .fnum{
+    transform:scale(1.08);
   }
   .frame-cap{
     padding:10px 12px;
@@ -304,13 +351,20 @@
     position:fixed;
     inset:0;
     background:rgba(10,10,10,0.92);
-    display:none;
+    display:flex;
     align-items:center;
     justify-content:center;
     z-index:100;
     padding:clamp(16px,4vw,56px);
+    opacity:0;
+    visibility:hidden;
+    transition:opacity .3s ease, visibility 0s linear .3s;
   }
-  .lightbox.open{ display:flex; }
+  .lightbox.open{
+    opacity:1;
+    visibility:visible;
+    transition:opacity .3s ease, visibility 0s linear 0s;
+  }
 
   .lightbox img{
     max-width:100%;
@@ -325,6 +379,11 @@
     align-items:center;
     gap:14px;
     max-width:100%;
+    transform:scale(0.94);
+    transition:transform .3s ease;
+  }
+  .lightbox.open .lightbox-frame{
+    transform:scale(1);
   }
 
   .lightbox-cap{
@@ -412,7 +471,7 @@
 
 <section id="work">
   <div class="gallery-head">
-    <h2>CONTACT SHEET</h2>
+    <h2>My Clicks</h2>
     <span class="mono" id="frameCount">0 FRAMES</span>
   </div>
 
@@ -522,8 +581,7 @@
       src: "https://res.cloudinary.com/ds5tpnjy4/image/upload/v1781064834/IMG20200723134406-01_svcikl.jpg",
       title: "Untitled",
       date: "2020.11.20"
-    },
-
+    }
   ];
 </script>
 
@@ -542,13 +600,15 @@
         const alt = photo.alt || (title + ' — phone photograph ' + num);
         return (
           '<div class="frame" data-index="' + i + '">' +
-            '<div class="frame-img">' +
-              '<span class="fnum">' + num + '</span>' +
-              '<img src="' + photo.src + '" alt="' + alt + '" loading="lazy">' +
-            '</div>' +
-            '<div class="frame-cap">' +
-              '<span><b>' + title + '</b></span>' +
-              '<span>' + date + '</span>' +
+            '<div class="frame-inner">' +
+              '<div class="frame-img">' +
+                '<span class="fnum">' + num + '</span>' +
+                '<img src="' + photo.src + '" alt="' + alt + '" loading="lazy">' +
+              '</div>' +
+              '<div class="frame-cap">' +
+                '<span><b>' + title + '</b></span>' +
+                '<span>' + date + '</span>' +
+              '</div>' +
             '</div>' +
           '</div>'
         );
@@ -560,6 +620,20 @@
     }
 
     renderFrames(PHOTOS);
+
+    // ---------- Scroll-reveal ----------
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.classList.add('in-view');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    Array.from(container.querySelectorAll('.frame')).forEach(frame => {
+      revealObserver.observe(frame);
+    });
 
     // ---------- Masonry-style justified layout ----------
     const frames = Array.from(container.querySelectorAll('.frame'));
